@@ -26,8 +26,17 @@ A simplified Python trading bot for Binance Futures Testnet (USDT-M).
 
 Run the bot using the CLI:
 
-### Markets
-The bot supports both `FUTURES` (default) and `SPOT` markets via the `--market` flag.
+### Quick Start Examples
+Run a **MARKET BUY** order:
+```powershell
+python cli.py --symbol BTCUSDT --side BUY --type MARKET --quantity 0.001
+```
+
+Run a **LIMIT SELL** order:
+```powershell
+python cli.py --symbol BTCUSDT --side SELL --type LIMIT --quantity 0.001 --price 90000
+```
+
 
 ### Place a Market Order
 ```bash
