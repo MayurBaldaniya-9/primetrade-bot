@@ -7,3 +7,5 @@ bot.log
 .pytest_cache/
 debug_auth.py
 *.pdf
+frontend/node_modules/
+frontend/dist/
