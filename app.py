@@ -76,9 +76,10 @@ def create_order(payload: OrderRequest):
         )
         return {"success": True, "data": summary}
     except ValueError as exc:
+        logger.warning(f"Order validation failed: {str(exc)}")
         return JSONResponse(
             status_code=400,
-            content={"success": False, "error": {"message": str(exc)}},
+            content={"success": False, "error": {"message": "Order validation failed"}},
         )
     except Exception as exc:
         logger.error(f"API execution error: {str(exc)}")

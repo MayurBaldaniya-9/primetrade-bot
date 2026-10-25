@@ -54,7 +54,7 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         body = response.json()
         self.assertFalse(body["success"])
-        self.assertIn("Price is required", body["error"]["message"])
+        self.assertEqual(body["error"]["message"], "Order validation failed")
 
     def test_place_order_payload_error(self):
         response = self.client.post(
