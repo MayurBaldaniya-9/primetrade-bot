@@ -2,3 +2,7 @@ python-binance
 python-dotenv
 questionary
 tabulate
+fastapi
+uvicorn
+httpx2
+requests

@@ -1,33 +1,19 @@
-# Utility file for order logic
-from bot.client import BinanceClientWrapper
-from bot.validators import validate_input, format_order_response
 from bot.logging_config import logger
+from bot.service import place_order
 
-def place_order(symbol, side, order_type, quantity, price=None):
-    """
-    Main logic for placing an order.
-    """
+
+def place_order_for_market(market, symbol, side, order_type, quantity, price=None):
+    """Main order placement logic for CLI and API usage."""
     try:
-        # Validate Input
-        validate_input(symbol, side, order_type, quantity, price)
-        
         logger.info(f"Initializing order: {side} {quantity} {symbol} ({order_type})")
-        
-        # Initialize Client
-        client = BinanceClientWrapper()
-        
-        # Place the order
-        response = client.place_futures_order(
+        return place_order(
+            market=market,
             symbol=symbol,
             side=side,
             order_type=order_type,
             quantity=quantity,
-            price=price
+            price=price,
         )
-        
-        # Process and return summary
-        summary = format_order_response(response, logger)
-        return summary
-    except Exception as e:
-        logger.error(f"Error in order placement logic: {str(e)}")
+    except Exception as exc:
+        logger.error(f"Error in order placement logic: {str(exc)}")
         raise

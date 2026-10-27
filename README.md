@@ -1,64 +1,83 @@
 # Primetrade Trading Bot
 
-A simplified Python trading bot for Binance Futures Testnet (USDT-M).
+A Binance Testnet trading bot with:
+- Python backend API + CLI
+- React frontend for order placement
 
-## Setup instructions
+## Backend setup
 
-1. **Clone the repository** (or navigate to the folder)
-2. **Create a virtual environment**:
+1. Create virtual environment and install dependencies:
    ```bash
    python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   ```
-3. **Install dependencies**:
-   ```bash
+   source .venv/bin/activate
    pip install -r requirements.txt
    ```
-4. **Configure Environment Variables**:
-   Create a `.env` file in the root directory with your Binance Testnet credentials:
-   ```env
-   BINANCE_API_KEY=your_testnet_api_key
-   BINANCE_SECRET_KEY=your_testnet_api_secret
-   BINANCE_TESTNET=true
+2. Create `.env` from `.env.example` and set Binance credentials.
+
+## Run backend API
+
+```bash
+uvicorn app:app --reload --host 0.0.0.0 --port 8000
+```
+
+Available endpoints:
+- `GET /health`
+- `POST /api/orders`
+
+Example payload:
+```json
+{
+  "market": "FUTURES",
+  "symbol": "BTCUSDT",
+  "side": "BUY",
+  "type": "MARKET",
+  "quantity": 0.001
+}
+```
+
+## Run CLI (still supported)
+
+```bash
+python cli.py --symbol BTCUSDT --side BUY --type MARKET --quantity 0.001
+```
+
+## Frontend setup
+
+1. Configure API base URL:
+   ```bash
+   cp frontend/.env.example frontend/.env
+   ```
+2. Install and run:
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
    ```
 
-## Usage
+Frontend defaults to `VITE_API_BASE_URL=http://localhost:8000`.
 
-Run the bot using the CLI:
+## Tests
 
-### Quick Start Examples
-Run a **MARKET BUY** order:
-```powershell
-python cli.py --symbol BTCUSDT --side BUY --type MARKET --quantity 0.001
-```
-
-Run a **LIMIT SELL** order:
-```powershell
-python cli.py --symbol BTCUSDT --side SELL --type LIMIT --quantity 0.001 --price 90000
-```
-
-
-### Place a Market Order
+Backend tests:
 ```bash
-python cli.py --symbol BTCUSDT --side BUY --type MARKET --quantity 0.001
+python -m unittest tests_validators.py tests_api.py
 ```
 
-### Place a Spot Market Order
+Frontend tests:
 ```bash
-python cli.py --market SPOT --symbol BTCUSDT --side BUY --type MARKET --quantity 0.001
+cd frontend
+npm run test
 ```
 
-### Place a Limit Order
+## Optional Docker Compose
+
 ```bash
-python cli.py --symbol BTCUSDT --side SELL --type LIMIT --quantity 0.001 --price 60000
+docker compose up --build
 ```
 
-## Features
-- Market and Limit orders on USDT-M Futures and Spot Testnets
-- Automatic Server Time Synchronization (fixes timestamp errors)
-- Input validation
-- Structured logging to `bot.log`
-- Robust error handling
-- Structured logging to `bot.log`
-- Robust error handling
-- Deployment-ready with Docker support
+- Backend: `http://localhost:8000`
+- Frontend: `http://localhost:5173`
+
+## Security note
+
+Never expose Binance API keys in frontend code. Keys stay only in backend `.env`.
